@@ -30,8 +30,9 @@ int accHigh = 405;
 int xValue = 0;
 int yValue = 0;
 int zValue = 0;
+int analogValue =0;
 int pwmValue = 0;
-int analogReadPin = potPin;
+int analogReadPin = zPin; //Start with Pot as input control
 
 void setup() {  
   Serial.begin(9600);
@@ -65,18 +66,24 @@ void loop() {
     delay(500);
   }
 
-  pwmValue = analogRead(analogReadPin);
+  analogValue = analogRead(analogReadPin);
 
   if (analogReadPin == potPin)
   {
-    potValue = map(pwmValue,potLow,potHigh,0,255);
-    analogWrite(selectedPin,potValue);
+    pwmValue = map(analogValue,potLow,potHigh,0,255);
   }
   else
   {
-    zValue = map(pwmValue,accLow,accHigh,0,255);
-    analogWrite(selectedPin,zValue);
+    pwmValue = map(analogValue,accLow,accHigh,0,255);
   }
+
+  if(pwmValue < 0)
+    pwmValue = 0;
+
+  if(pwmValue > 255)
+    pwmValue = 255;
+
+  analogWrite(selectedPin,pwmValue);
   
   //Serial.print("Button State:  ");
   //Serial.println(selectorState);
