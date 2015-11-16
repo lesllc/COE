@@ -23,12 +23,12 @@ int selectorState = 1;
 
 //default values
 int potValue = 0; //start from 255 as common anode, TF turned off
-const int potLow = 4;
-const int potHigh = 820;
-int accLow = 271;
-int accHigh = 405;
+const int potLow = 4;    //These potentiometer values are derived by using a pot
+const int potHigh = 820; //as a voltage divider and finding the low and high values
+int accLow = 271;        //These accelerometer values are derived by rotating about
+int accHigh = 405;       //the Z-axis to find the low and high output.
 int xValue = 0;
-int yValue = 0;
+int yValue = 0;          //Initially, set all these to off.
 int zValue = 0;
 int analogValue =0;
 int pwmValue = 0;
@@ -44,7 +44,7 @@ void loop() {
   selectorState = digitalRead(selectorPin);
   if(selectorState == LOW) 
   {
-    //switch LEDs
+    //Switch LEDs
     if (selectedPin == redPin)
       selectedPin = greenPin;
     else if (selectedPin == greenPin)
@@ -55,6 +55,7 @@ void loop() {
     delay(500);
   }
 
+  //Switch analog input pins
   resetState = digitalRead(resetPin);
   if (resetState == LOW)
   {
@@ -66,6 +67,7 @@ void loop() {
     delay(500);
   }
 
+  //Read & map analog values to PWM values
   analogValue = analogRead(analogReadPin);
 
   if (analogReadPin == potPin)
@@ -77,9 +79,9 @@ void loop() {
     pwmValue = map(analogValue,accLow,accHigh,0,255);
   }
 
+  //Roughly filter out overflow values on the PWM output
   if(pwmValue < 0)
     pwmValue = 0;
-
   if(pwmValue > 255)
     pwmValue = 255;
 
