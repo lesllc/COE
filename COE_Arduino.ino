@@ -22,15 +22,15 @@ int selectedPin = redPin;
 int selectorState = 1;
 
 //default values
-int potValue = 255; //start from 255 as common anode, TF turned off
-const int potLow = 0;
-const int potHigh = 920;
+int potValue = 0; //start from 255 as common anode, TF turned off
+const int potLow = 4;
+const int potHigh = 820;
 int accLow = 271;
 int accHigh = 405;
-int xValue = 255;
-int yValue = 255;
-int zValue = 255;
-int pwmValue = 255;
+int xValue = 0;
+int yValue = 0;
+int zValue = 0;
+int pwmValue = 0;
 int analogReadPin = potPin;
 
 void setup() {  
@@ -69,12 +69,12 @@ void loop() {
 
   if (analogReadPin == potPin)
   {
-    potValue = map(pwmValue,potLow,potHigh,255,0);
+    potValue = map(pwmValue,potLow,potHigh,0,255);
     analogWrite(selectedPin,potValue);
   }
   else
   {
-    zValue = map(pwmValue,accLow,accHigh,255,0);
+    zValue = map(pwmValue,accLow,accHigh,0,255);
     analogWrite(selectedPin,zValue);
   }
   
@@ -89,10 +89,13 @@ void loop() {
   //  if (zValue > accHigh)
   //    accHigh = zValue;
 
-  Serial.print("Raw Z:   ");
-  Serial.print(analogRead(zPin));
-  Serial.print("  accLow:  ");
-  Serial.print(accLow);
-  Serial.print("  accHigh:  ");
-  Serial.println(accHigh);
+    Serial.print("Raw Pot:   ");
+    Serial.print(analogRead(potPin));
+    Serial.print("  accLow:  ");
+    Serial.print(potLow);
+    Serial.print("  accHigh:  ");
+    Serial.print(potHigh);
+    Serial.print("  pwm Value:  ");
+    Serial.println(potValue);
+ 
 }
