@@ -66,8 +66,8 @@ void loop() {
     do
     {
       holdState=digitalRead(holdPin);
-      delay(500);
     } while(holdState == HIGH);
+    delay(500);
   }
 
   //Switch analog input pins
