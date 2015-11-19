@@ -15,7 +15,8 @@ const int bluePin = 10;
 //digital input Pins
 const int potPin = 3; //pin Analog 3 (A3)
 const int selectorPin = 2;
-const int durationPin = 4;
+const int holdPin = 4;
+int holdState = 1;
 const int resetPin = 5;
 int resetState = 1;
 int selectedPin = redPin;
@@ -25,8 +26,8 @@ int selectorState = 1;
 int potValue = 0; //start from 255 as common anode, TF turned off
 const int potLow = 4;    //These potentiometer values are derived by using a pot
 const int potHigh = 820; //as a voltage divider and finding the low and high values
-int accLow = 271;        //These accelerometer values are derived by rotating about
-int accHigh = 405;       //the Z-axis to find the low and high output.
+int accLow = 415;        //These accelerometer values are derived by rotating about
+int accHigh = 615;       //the Z-axis to find the low and high output.
 int xValue = 0;
 int yValue = 0;          //Initially, set all these to off.
 int zValue = 0;
@@ -35,6 +36,7 @@ int pwmValue = 0;
 int analogReadPin = zPin; //Start with Pot as input control
 
 void setup() {  
+  analogReference(EXTERNAL);
   Serial.begin(9600);
   //Since we are using analogWrite on this pin, setting it to output is not needed
   //pinMode(bluePin,OUTPUT);
@@ -99,12 +101,12 @@ void loop() {
   //    accHigh = zValue;
 
     Serial.print("Raw Pot:   ");
-    Serial.print(analogRead(potPin));
+    Serial.print(analogRead(zPin));
     Serial.print("  accLow:  ");
-    Serial.print(potLow);
+    Serial.print(accLow);
     Serial.print("  accHigh:  ");
-    Serial.print(potHigh);
+    Serial.print(accHigh);
     Serial.print("  pwm Value:  ");
-    Serial.println(potValue);
+    Serial.println(pwmValue);
  
 }
