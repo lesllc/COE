@@ -57,17 +57,30 @@ void loop() {
     delay(500);
   }
 
-  //Switch analog input pins
-  resetState = digitalRead(resetPin);
-  if (resetState == LOW)
+  //This portion holds the current color.
+  //To unlock the hold, press the black button again.
+  holdState = digitalRead(holdPin);
+  if(holdState == LOW)
   {
-    if (analogReadPin == potPin)
-      analogReadPin = zPin;
-    else
-      analogReadPin = potPin;
-
     delay(500);
+    do
+    {
+      holdState=digitalRead(holdPin);
+      delay(500);
+    } while(holdState == HIGH);
   }
+
+  //Switch analog input pins
+//  resetState = digitalRead(resetPin);
+//  if (resetState == LOW)
+//  {
+//    if (analogReadPin == potPin)
+//      analogReadPin = zPin;
+//    else
+//      analogReadPin = potPin;
+//
+//    delay(500);
+//  }
 
   //Read & map analog values to PWM values
   analogValue = analogRead(analogReadPin);
