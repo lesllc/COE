@@ -7,13 +7,15 @@ const int xPin = 0; //pin Analog 0 (A0)
 const int yPin = 1; //pin Analog 1 (A1)
 const int zPin = 2; //pin Analog 2 (A2)
 
+//Analog input pin for potentiometer
+const int potPin = 3; //pin Analog 3 (A3)
+
 //LED Pins
 const int redPin = 3;
 const int greenPin = 9;
 const int bluePin = 10;
 
 //digital input Pins
-const int potPin = 3; //pin Analog 3 (A3)
 const int selectorPin = 2;
 const int holdPin = 4;
 int holdState = 1;
@@ -33,7 +35,7 @@ int yValue = 0;          //Initially, set all these to off.
 int zValue = 0;
 int analogValue =0;
 int pwmValue = 0;
-int analogReadPin = zPin; //Start with Pot as input control
+int analogReadPin = zPin; //Start with accelerometer z pin as input control
 
 void setup() {  
   analogReference(EXTERNAL);
@@ -70,18 +72,6 @@ void loop() {
     delay(500);
   }
 
-  //Switch analog input pins
-//  resetState = digitalRead(resetPin);
-//  if (resetState == LOW)
-//  {
-//    if (analogReadPin == potPin)
-//      analogReadPin = zPin;
-//    else
-//      analogReadPin = potPin;
-//
-//    delay(500);
-//  }
-
   //Read & map analog values to PWM values
   analogValue = analogRead(analogReadPin);
 
@@ -89,7 +79,7 @@ void loop() {
   {
     pwmValue = map(analogValue,potLow,potHigh,0,255);
   }
-  else
+  else if(analogReadPin == zPin)
   {
     pwmValue = map(analogValue,accLow,accHigh,0,255);
   }
@@ -101,25 +91,14 @@ void loop() {
     pwmValue = 255;
 
   analogWrite(selectedPin,pwmValue);
-  
-  //Serial.print("Button State:  ");
-  //Serial.println(selectorState);
-  //Serial.println(potValue);
-  // delay(200);
 
-  //  if (zValue < accLow)
-  //    accLow = zValue;
-  //
-  //  if (zValue > accHigh)
-  //    accHigh = zValue;
-
-    Serial.print("Raw Pot:   ");
-    Serial.print(analogRead(zPin));
-    Serial.print("  accLow:  ");
-    Serial.print(accLow);
-    Serial.print("  accHigh:  ");
-    Serial.print(accHigh);
-    Serial.print("  pwm Value:  ");
-    Serial.println(pwmValue);
+  Serial.print("Raw zPin:   ");
+  Serial.print(analogRead(zPin));
+  Serial.print("  accLow:  ");
+  Serial.print(accLow);
+  Serial.print("  accHigh:  ");
+  Serial.print(accHigh);
+  Serial.print("  pwm Value:  ");
+  Serial.println(pwmValue);
  
 }
