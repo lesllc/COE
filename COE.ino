@@ -16,10 +16,10 @@ const int greenPin = 9;
 const int bluePin = 10;
 
 //digital input Pins
-const int selectorPin = 2;
-const int holdPin = 4;
+const int selectorPin = 2; //yellow button
+const int holdPin = 4;     //blue butotn
 int holdState = 1;
-const int resetPin = 5;
+const int resetPin = 5;    //black button
 int resetState = 1;
 int selectedPin = redPin;
 int selectorState = 1;
