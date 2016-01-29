@@ -25,28 +25,38 @@ int selectedPin = redPin;
 int selectorState = 1;
 
 //default values
-int potValue = 0; //start from 255 as common anode, TF turned off
+int potValue = 0; 
 const int potLow = 4;    //These potentiometer values are derived by using a pot
 const int potHigh = 820; //as a voltage divider and finding the low and high values
 int accLow = 415;        //These accelerometer values are derived by rotating about
 int accHigh = 615;       //the Z-axis to find the low and high output.
 int xValue = 0;
-int yValue = 0;          //Initially, set all these to off.
+int yValue = 0;          //Initialize all raw accelerometer values to zero
 int zValue = 0;
 int analogValue =0;
 int pwmValue = 0;
 int analogReadPin = zPin; //Start with accelerometer z pin as input control
 
 void setup() {  
-  analogReference(EXTERNAL);
-  Serial.begin(9600);
+  analogReference(EXTERNAL); //The accelerometer is a 3.3V chipset. In the
+                             //circuit you must feed a 3.3V reference into
+                             //AREF for the ADC to accurately represent the
+                             //analog signal digitally
+
+  Serial.begin(9600);        //Initialize serial communications, baud rate 9600
+
+  //Typically, you must configure a pin to either be an input or output pin
   //Since we are using analogWrite on this pin, setting it to output is not needed
   //pinMode(bluePin,OUTPUT);
 }
 
 void loop() {
   selectorState = digitalRead(selectorPin);
-  if(selectorState == LOW) 
+
+  //In the circuit, the selectorPin is pulled high. When the button is pressed
+  //the current is sunk to ground, thus registering the signal as low.
+  //This means that LOW is when the button is pressed
+  if(selectorState == LOW)
   {
     //Switch LEDs
     if (selectedPin == redPin)
@@ -56,19 +66,19 @@ void loop() {
     else
       selectedPin = redPin;
 
-    delay(500);
-  }
+    delay(500); //Fingers move slower than computers. Wait .5 seconds to 
+  }             //give the user time to remove their finger such that only one
+                //button press is read. This is called debouncing the switch
 
-  //This portion holds the current color.
-  //To unlock the hold, press the black button again.
+  //This portion holds the current color
   holdState = digitalRead(holdPin);
-  if(holdState == LOW)
-  {
+  if(holdState == LOW)                //if the holdPin button is pressed, hold
+  {                                   //the color
     delay(500);
     do
     {
       holdState=digitalRead(holdPin);
-    } while(holdState == HIGH);
+    } while(holdState == HIGH);       //if the holdPin is pressed, break loop
     delay(500);
   }
 
@@ -92,6 +102,7 @@ void loop() {
 
   analogWrite(selectedPin,pwmValue);
 
+  //Write out debug data to serial line
   Serial.print("Raw zPin:   ");
   Serial.print(analogRead(zPin));
   Serial.print("  accLow:  ");
